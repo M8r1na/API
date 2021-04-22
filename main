@@ -1,0 +1,178 @@
+import vk_api
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
+from vk_api import VkUpload
+import random
+import os
+import requests
+import wikipedia
+
+counter = 0
+messages = 0
+key = ''
+value = ''
+fails = []
+
+wikipedia.set_lang("RU")
+
+
+map_requests = {'Москва': "https://static-maps.yandex.ru/1.x/?ll=37.4,55.5&spn=50,50&l=sat&pt=37.4,55.5,vkbkm",
+                'Санкт-Петербург': "https://static-maps.yandex.ru/1.x/?ll=30.2,59.6&spn=50,50&l=sat&pt=30.2,59.6,vkbkm",
+                'Красноярск': "https://static-maps.yandex.ru/1.x/?ll=92.5,56.01&spn=80,80&l=sat&pt=92.5,56.01,vkbkm",
+                'Владивосток': "https://static-maps.yandex.ru/1.x/?ll=131.5,43.07&spn=80,80&l=sat&pt=131.5,43.07,vkbkm",
+                'Лондон': "https://static-maps.yandex.ru/1.x/?ll=-0.13,51.5&spn=80,80&l=sat&pt=-0.13,51.5,vkbkm",
+                'Тихий океан': "https://static-maps.yandex.ru/1.x/?ll=160,0&spn=80,80&l=sat&pt=160,0,vkbkm",
+                'Антарктида': "https://static-maps.yandex.ru/1.x/?ll=0.4,75&spn=80,80&l=sat&pt0.4,75,vkbkm"}
+pictures = {'Москва': 'https://www.vao-moscow.ru/wp-content/uploads/2017/01/fMj1mPA7KJw.jpg',
+            'Санкт-Петербург': 'https://snpcrimea.ru/wp-content/uploads/2018/03/Sank-Peterburg-1.jpg',
+            'Красноярск': 'https://www.hotelkrs.ru/upload/images/gelio-vostok-1.jpg',
+            'Владивосток': "https://www.syl.ru/misc/i/ai/413567/2756586.jpg",
+            "Лондон": "https://prm.azbukadekor.ru/upload/iblock/0fa/0fa6e52cdd1cf47715ec53d4cec9b066.jpg",
+            "Тихий океан": "https://i10.fotocdn.net/s122/621b5e4e7b50be18/public_pin_l/2786010497.jpg",
+            'Антарктида': "https://cdn.fishki.net/upload/post/2016/12/30/2179518/1-27.jpg"}
+
+
+def main():
+    global messages, key, value, counter
+    
+    def end():
+        vk.messages.send(
+            user_id=event.obj.message['from_id'],
+            message=f'Спасибо, что прошёл тест. Твой результат - {counter} из 7.',
+            random_id=random.randint(0, 2 ** 64)
+        )
+        if counter < 3:
+            vk.messages.send(
+                user_id=event.obj.message['from_id'],
+                message=f'Если честно, тебе не помешало бы подтянуть знания по географии.',
+                random_id=random.randint(0, 2 ** 64)
+            )
+        elif counter < 6:
+            vk.messages.send(
+                user_id=event.obj.message['from_id'],
+                message=f'Это неплохой балл, но всегда есть к чему стремиться!',
+                random_id=random.randint(0, 2 ** 64)
+            )
+        else:
+            vk.messages.send(
+                user_id=event.obj.message['from_id'],
+                message=f'Это говорит об отличных знаниях номенклатуры!',
+                random_id=random.randint(0, 2 ** 64)
+            )
+        if len(fails) != 0:
+            vk.messages.send(
+                user_id=event.obj.message['from_id'],
+                message=f'А вот объекты, которые тебе не удалось определить:',
+                random_id=random.randint(0, 2 ** 64)
+            )
+            for i in fails:
+                upload = VkUpload(vk_session)
+                image_url = pictures.get(i)
+                image = session.get(image_url , stream=True)
+                photo = upload.photo_messages(photos=image.raw)[0]
+                vk.messages.send(
+                    user_id=event.obj.message['from_id'],
+                    attachment='photo{}_{}'.format(photo['owner_id'], photo['id']),
+                    message=f'{wikipedia.summary(i)}',
+                    random_id=random.randint(0, 2 ** 64)
+                )
+
+        raise SystemExit
+    
+    session = requests.Session()
+    while True:
+        vk_session = vk_api.VkApi(token='ce9392c93d4dec6f2f7e7b7053b1eb6df03003055b0f55b883641062a61bda42970cdc9f886a8d7b58f29')
+        longpoll = VkBotLongPoll(vk_session, 204153988)
+
+        for event in longpoll.listen():
+
+            if len(map_requests) == 0 and messages == 8:
+                end()
+
+            if event.type == VkBotEventType.MESSAGE_NEW:
+                vk = vk_session.get_api()
+                if messages == 0:
+                    vk.messages.send(
+                        user_id=event.obj.message['from_id'],
+                        message=f'Привет. Хочешь пройти географический тест?',
+                        random_id=random.randint(0, 2 ** 64)
+                    )
+                    messages += 1
+
+                if str(key) == '':
+                    if 'да' in str(event.obj.message['text']).lower() and len(map_requests) != 0 and messages != 8:
+                        key = random.choice(list(map_requests.keys()))
+                        value = map_requests.pop(key)
+                        response = requests.get(value)
+                        map_file = "map.png"
+                        with open(map_file , "wb") as file:
+                            file.write(response.content)
+
+                        attachments = []
+                        upload = VkUpload(vk_session)
+                        photo = upload.photo_messages(photos=map_file)[0]
+                        attachments.append(
+                            'photo{}_{}'.format(photo['owner_id'], photo['id'])
+                        )
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'],
+                            attachment=','.join(attachments),
+                            message='Что это за объект?',
+                            random_id=random.randint(0, 2 ** 64)
+                        )
+                        os.remove(map_file)
+                        messages += 1
+                    elif 'нет' in str(event).lower():
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'] ,
+                            message=f'Как скажешь...',
+                            random_id=random.randint(0, 2 ** 64)
+                        )
+                        end()
+                else:
+                    if str(event.obj.message['text']).capitalize() == str(key).capitalize() and str(key) != '' and len(map_requests) != 0:
+                        counter += 1
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'],
+                            message=f'Верно! Теперь количество ваших верных ответов равняется {counter}.',
+                            random_id=random.randint(0, 2 ** 64)
+                        )
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'],
+                            message=f'Количество оставшихся вопросов - {len(map_requests)}. Хотите продолжить?',
+                            random_id=random.randint(0, 2 ** 64)
+                        )
+                        key, value = '', ''
+                    elif str(event.obj.message['text']).capitalize() != str(key).capitalize() and str(key) != '' and len(map_requests) != 0:
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'] ,
+                            message=f'Неверно. Количество ваших верных ответов по прежнему равняется {counter}.' ,
+                            random_id=random.randint(0, 2 ** 64)
+                        )
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'],
+                            message=f'Количество оставшихся вопросов - {len(map_requests)}. Хотите продолжить?',
+                            random_id=random.randint(0, 2 ** 64)
+                        )
+                        fails.append(str(key))
+                        key, value = '' , ''
+
+                if "скольк" in str(event.obj.message['text']).lower() and 'меня' in \
+                        str(event.obj.message['text']).lower() and ('бал' in str(event.obj.message['text']).lower() or
+                                                                    'ответ' in str(event.obj.message['text']).lower()):
+                    vk.messages.send(
+                        user_id=event.obj.message['from_id'] ,
+                        message=f'У вас {counter} верных ответов.',
+                        random_id=random.randint(0 , 2 ** 64)
+                    )
+
+                if "конец" in str(event.obj.message['text']).lower() or "законч" in str(event.obj.message['text']).lower():
+                    vk.messages.send(
+                        user_id=event.obj.message['from_id'],
+                        message=f'Как скажешь.',
+                        random_id=random.randint(0 , 2 ** 64)
+                    )
+                    end()
+
+
+if __name__ == '__main__':
+    main()
