@@ -11,73 +11,102 @@ messages = 0
 key = ''
 value = ''
 fails = []
+category = ''
+stop = 0
 
 wikipedia.set_lang("RU")
 
 
-map_requests = {'Москва': "https://static-maps.yandex.ru/1.x/?ll=37.4,55.5&spn=50,50&l=sat&pt=37.4,55.5,vkbkm",
+map_cities_requests = {'Москва': "https://static-maps.yandex.ru/1.x/?ll=37.4,55.5&spn=50,50&l=sat&pt=37.4,55.5,vkbkm",
                 'Санкт-Петербург': "https://static-maps.yandex.ru/1.x/?ll=30.2,59.6&spn=50,50&l=sat&pt=30.2,59.6,vkbkm",
                 'Красноярск': "https://static-maps.yandex.ru/1.x/?ll=92.5,56.01&spn=80,80&l=sat&pt=92.5,56.01,vkbkm",
                 'Владивосток': "https://static-maps.yandex.ru/1.x/?ll=131.5,43.07&spn=80,80&l=sat&pt=131.5,43.07,vkbkm",
                 'Лондон': "https://static-maps.yandex.ru/1.x/?ll=-0.13,51.5&spn=80,80&l=sat&pt=-0.13,51.5,vkbkm",
-                'Тихий океан': "https://static-maps.yandex.ru/1.x/?ll=160,0&spn=80,80&l=sat&pt=160,0,vkbkm",
-                'Антарктида': "https://static-maps.yandex.ru/1.x/?ll=0.4,75&spn=80,80&l=sat&pt0.4,75,vkbkm"}
-pictures = {'Москва': 'https://www.vao-moscow.ru/wp-content/uploads/2017/01/fMj1mPA7KJw.jpg',
+                'Нижний Новгород': "https://static-maps.yandex.ru/1.x/?ll=44,56.2&spn=80,80&l=sat&pt=44,56.2,vkbkm"}
+cities_pictures = {'Москва': 'https://www.vao-moscow.ru/wp-content/uploads/2017/01/fMj1mPA7KJw.jpg',
             'Санкт-Петербург': 'https://snpcrimea.ru/wp-content/uploads/2018/03/Sank-Peterburg-1.jpg',
             'Красноярск': 'https://www.hotelkrs.ru/upload/images/gelio-vostok-1.jpg',
             'Владивосток': "https://www.syl.ru/misc/i/ai/413567/2756586.jpg",
             "Лондон": "https://prm.azbukadekor.ru/upload/iblock/0fa/0fa6e52cdd1cf47715ec53d4cec9b066.jpg",
-            "Тихий океан": "https://i10.fotocdn.net/s122/621b5e4e7b50be18/public_pin_l/2786010497.jpg",
-            'Антарктида': "https://cdn.fishki.net/upload/post/2016/12/30/2179518/1-27.jpg"}
+            "Нижний Новгород": "https://fb.ru/misc/i/gallery/44541/2238188.jpg"}
+map_continents_requests = {'Евразия': "https://static-maps.yandex.ru/1.x/?ll=60.4,56.5&spn=50,50&l=sat&pt=60.4,56.5,vkbkm",
+                           'Австралия': "https://static-maps.yandex.ru/1.x/?ll=134,-26&spn=50,50&l=sat&pt=134,-26,vkbkm",
+                           'Африка': "https://static-maps.yandex.ru/1.x/?ll=18.3,4.2&spn=50,50&l=sat&pt=18.3,4.2,vkbkm",
+                           'Северная Америка': "https://static-maps.yandex.ru/1.x/?ll=97,38&spn=50,50&l=sat&pt=97,38,vkbkm",
+                           'Южная Америка': "https://static-maps.yandex.ru/1.x/?ll=-47.9,-15.8&spn=50,50&l=sat&pt=-47.9,-15.8,vkbkm",
+                           'Антарктида': "https://static-maps.yandex.ru/1.x/?ll=-85.3,78.3&spn=50,50&l=sat&pt=-85.3,78.3,vkbkm"}
+continents_pictures = {'Евразия': "https://tripsecrets.ru/wp-content/uploads/2019/09/3-17.jpg",
+                        'Австралия': "https://about-planet.ru/images/avstralia/priroda/materik_avstralia/kontinent-avstralia1.jpg",
+                        'Африка': "https://www.istanbul-city-guide.com/map/Africa/africa_satellite_image.jpg",
+                        'Северная Америка': "https://dogcatdog.ru/wp-content/uploads/0/3/b/03bc5b306146265fb798aecadd079429.jpg",
+                        'Южная Америка': "https://regnum.ru/uploads/pictures/news/2017/06/02/regnum_picture_1496396378350614_normal.jpg",
+                        'Антарктида': "http://andrey-eltsov.ru/wp-content/uploads/2020/07/xd-ju-j_u374_jufdft_j8-jh_t-swww-mkjh-sw2-vjfd_ju-3-vid-iz-kosmosa.jpg"}
+map_seas_requests = {'Саргассово море': "https://static-maps.yandex.ru/1.x/?ll=-66.1,28.2&spn=50,50&l=sat&pt=-66.1,28.2,vkbkm",
+                           'Аравийское море': "https://static-maps.yandex.ru/1.x/?ll=63.5,15.5&spn=50,50&l=sat&pt=63.5,15.5,vkbkm",
+                           'Тасманово море': "https://static-maps.yandex.ru/1.x/?ll=160.3,37.2&spn=50,50&l=sat&pt=160.3,37.2,vkbkm",
+                           'Карибское море': "https://static-maps.yandex.ru/1.x/?ll=70,15&spn=50,50&l=sat&pt=70,15,vkbkm",
+                           'Средиземное море': "https://static-maps.yandex.ru/1.x/?ll=18,36&spn=50,50&l=sat&pt=18,36,vkbkm",
+                           'Берингово море': "https://static-maps.yandex.ru/1.x/?ll=178.5,60&spn=50,50&l=sat&pt=178.5,60,vkbkm"}
+seas_pictures = {'Саргассово море': "https://www.syl.ru/misc/i/ni/5/9/5/1/0/8/i/595108.jpg",
+                           'Аравийское море': "https://studychinese.ru/content/dictionary/pictures/25/12957.jpg",
+                           'Тасманово море': "https://farm6.staticflickr.com/5234/13662797084_9b3295c35a_o.jpg",
+                           'Карибское море': "https://republica-dominikana.ru/wp-content/uploads/2018/08/38.jpg",
+                           'Средиземное море': "https://voenflot.ru/wp-content/uploads/2020/06/960.jpg",
+                           'Берингово море': "https://bibliotechniycenterbronnitcy.ru/wp-content/uploads/2019/09/Берингово-море.jpg"}
 
 
 def main():
-    global messages, key, value, counter
-    
+    global messages, key, value, counter, category, stop
+
     def end():
         vk.messages.send(
-            user_id=event.obj.message['from_id'],
-            message=f'Спасибо, что прошёл тест. Твой результат - {counter} из 7.',
-            random_id=random.randint(0, 2 ** 64)
+            user_id=event.obj.message['from_id'] ,
+            message=f'Спасибо, что прошёл тест. Твой результат - {counter} из 6.' ,
+            random_id=random.randint(0 , 2 ** 64)
         )
         if counter < 3:
             vk.messages.send(
-                user_id=event.obj.message['from_id'],
-                message=f'Если честно, тебе не помешало бы подтянуть знания по географии.',
-                random_id=random.randint(0, 2 ** 64)
+                user_id=event.obj.message['from_id'] ,
+                message=f'Если честно, тебе не помешало бы подтянуть знания по географии.' ,
+                random_id=random.randint(0 , 2 ** 64)
             )
         elif counter < 6:
             vk.messages.send(
-                user_id=event.obj.message['from_id'],
-                message=f'Это неплохой балл, но всегда есть к чему стремиться!',
-                random_id=random.randint(0, 2 ** 64)
+                user_id=event.obj.message['from_id'] ,
+                message=f'Это неплохой балл, но всегда есть к чему стремиться!' ,
+                random_id=random.randint(0 , 2 ** 64)
             )
         else:
             vk.messages.send(
-                user_id=event.obj.message['from_id'],
-                message=f'Это говорит об отличных знаниях номенклатуры!',
-                random_id=random.randint(0, 2 ** 64)
+                user_id=event.obj.message['from_id'] ,
+                message=f'Это говорит об отличных знаниях номенклатуры!' ,
+                random_id=random.randint(0 , 2 ** 64)
             )
         if len(fails) != 0:
             vk.messages.send(
-                user_id=event.obj.message['from_id'],
-                message=f'А вот объекты, которые тебе не удалось определить:',
-                random_id=random.randint(0, 2 ** 64)
+                user_id=event.obj.message['from_id'] ,
+                message=f'А вот объекты, которые тебе не удалось определить:' ,
+                random_id=random.randint(0 , 2 ** 64)
             )
             for i in fails:
                 upload = VkUpload(vk_session)
-                image_url = pictures.get(i)
+                if category == 'города':
+                    image_url = cities_pictures.get(i)
+                elif category == 'материки':
+                    image_url = continents_pictures.get(i)
+                elif category == 'моря':
+                    image_url = seas_pictures.get(i)
                 image = session.get(image_url , stream=True)
                 photo = upload.photo_messages(photos=image.raw)[0]
                 vk.messages.send(
-                    user_id=event.obj.message['from_id'],
-                    attachment='photo{}_{}'.format(photo['owner_id'], photo['id']),
-                    message=f'{wikipedia.summary(i)}',
-                    random_id=random.randint(0, 2 ** 64)
+                    user_id=event.obj.message['from_id'] ,
+                    attachment='photo{}_{}'.format(photo['owner_id'] , photo['id']) ,
+                    message=f'{wikipedia.summary(i)}' ,
+                    random_id=random.randint(0 , 2 ** 64)
                 )
 
         raise SystemExit
-    
+
     session = requests.Session()
     while True:
         vk_session = vk_api.VkApi(token='ce9392c93d4dec6f2f7e7b7053b1eb6df03003055b0f55b883641062a61bda42970cdc9f886a8d7b58f29')
@@ -85,24 +114,67 @@ def main():
 
         for event in longpoll.listen():
 
-            if len(map_requests) == 0 and messages == 8:
+            if (len(map_seas_requests) == 0 or len(map_continents_requests) == 0 or len(map_cities_requests) == 0) and messages == 8:
                 end()
 
             if event.type == VkBotEventType.MESSAGE_NEW:
                 vk = vk_session.get_api()
-                if messages == 0:
+                if messages == 0 and stop == 0:
                     vk.messages.send(
-                        user_id=event.obj.message['from_id'],
-                        message=f'Привет. Хочешь пройти географический тест?',
-                        random_id=random.randint(0, 2 ** 64)
+                        user_id=event.obj.message['from_id'] ,
+                        message=f'Привет. Хочешь пройти географический тест?' ,
+                        random_id=random.randint(0 , 2 ** 64)
                     )
                     messages += 1
+                    stop = 1
+
+                elif messages == 1 and category == '' and stop == 1:
+                    if 'да' in str(event.obj.message['text']).lower():
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'] ,
+                            message='Выбери категорию: города, моря или материки?' ,
+                            random_id=random.randint(0 , 2 ** 64)
+                        )
+                        messages += 1
+                    elif 'нет' in str(event.obj.message['text']).lower():
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'] ,
+                            message=f'Как скажешь...' ,
+                            random_id=random.randint(0 , 2 ** 64)
+                        )
+                        end()
+
+                if stop == 1 and category == '':
+                    if 'города' in str(event.obj.message['text']).lower():
+                        category = "города"
+                    elif 'моря' in str(event.obj.message['text']).lower():
+                        category = "моря"
+                    elif 'материки' in str(event.obj.message['text']).lower():
+                        category = "материки"
+                    if category != '':
+                        vk.messages.send(
+                            user_id=event.obj.message['from_id'] ,
+                            message='Отлично! Тогда начнём.' ,
+                            random_id=random.randint(0 , 2 ** 64)
+                        )
 
                 if str(key) == '':
-                    if 'да' in str(event.obj.message['text']).lower() and len(map_requests) != 0 and messages != 8:
-                        key = random.choice(list(map_requests.keys()))
-                        value = map_requests.pop(key)
+                    if 'да' in str(event.obj.message['text']).lower() and (
+                            (category == 'моря' and len(map_seas_requests) != 0) or (category == 'материки' and
+                            len(map_continents_requests) != 0) or (category == 'города' and
+                            len(map_cities_requests) != 0)) and messages != 8 and messages != 1:
+                        if category == 'материки':
+                            key = random.choice(list(map_continents_requests.keys()))
+                            value = map_continents_requests.pop(key)
+                        elif category == 'моря':
+                            key = random.choice(list(map_seas_requests.keys()))
+                            value = map_seas_requests.pop(key)
+                        elif category == 'города':
+                            key = random.choice(list(map_cities_requests.keys()))
+                            value = map_cities_requests.pop(key)
                         response = requests.get(value)
+                        print(key, value, response)
+
                         map_file = "map.png"
                         with open(map_file , "wb") as file:
                             file.write(response.content)
@@ -111,7 +183,7 @@ def main():
                         upload = VkUpload(vk_session)
                         photo = upload.photo_messages(photos=map_file)[0]
                         attachments.append(
-                            'photo{}_{}'.format(photo['owner_id'], photo['id'])
+                            'photo{}_{}'.format(photo['owner_id'] , photo['id'])
                         )
                         vk.messages.send(
                             user_id=event.obj.message['from_id'],
@@ -125,36 +197,66 @@ def main():
                         vk.messages.send(
                             user_id=event.obj.message['from_id'] ,
                             message=f'Как скажешь...',
-                            random_id=random.randint(0, 2 ** 64)
+                            random_id=random.randint(0 , 2 ** 64)
                         )
                         end()
                 else:
-                    if str(event.obj.message['text']).capitalize() == str(key).capitalize() and str(key) != '' and len(map_requests) != 0:
+                    if str(event.obj.message['text']).capitalize() == str(key).capitalize() and str(key) != '' and \
+                            len(map_cities_requests) != 0 and len(map_continents_requests) != 0 and \
+                            len(map_seas_requests) != 0:
                         counter += 1
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'],
-                            message=f'Верно! Теперь количество ваших верных ответов равняется {counter}.',
-                            random_id=random.randint(0, 2 ** 64)
+                            user_id=event.obj.message['from_id'] ,
+                            message=f'Верно! Теперь количество ваших верных ответов равняется {counter}.' ,
+                            random_id=random.randint(0 , 2 ** 64)
                         )
-                        vk.messages.send(
-                            user_id=event.obj.message['from_id'],
-                            message=f'Количество оставшихся вопросов - {len(map_requests)}. Хотите продолжить?',
-                            random_id=random.randint(0, 2 ** 64)
-                        )
+                        if category == 'материки':
+                            vk.messages.send(
+                                user_id=event.obj.message['from_id'] ,
+                                message=f'Количество оставшихся вопросов - {len(map_continents_requests)}. Хотите продолжить?' ,
+                                random_id=random.randint(0 , 2 ** 64)
+                            )
+                        elif category == 'города':
+                            vk.messages.send(
+                                user_id=event.obj.message['from_id'] ,
+                                message=f'Количество оставшихся вопросов - {len(map_cities_requests)}. Хотите продолжить?' ,
+                                random_id=random.randint(0 , 2 ** 64)
+                            )
+                        elif category == 'моря':
+                            vk.messages.send(
+                                user_id=event.obj.message['from_id'] ,
+                                message=f'Количество оставшихся вопросов - {len(map_seas_requests)}. Хотите продолжить?' ,
+                                random_id=random.randint(0 , 2 ** 64)
+                            )
                         key, value = '', ''
-                    elif str(event.obj.message['text']).capitalize() != str(key).capitalize() and str(key) != '' and len(map_requests) != 0:
+                    elif str(event.obj.message['text']).capitalize() != str(key).capitalize() and str(key) != '' \
+                            and len(map_cities_requests) != 0 and len(map_continents_requests) != 0 and \
+                            len(map_seas_requests) != 0:
                         vk.messages.send(
                             user_id=event.obj.message['from_id'] ,
                             message=f'Неверно. Количество ваших верных ответов по прежнему равняется {counter}.' ,
-                            random_id=random.randint(0, 2 ** 64)
+                            random_id=random.randint(0 , 2 ** 64)
                         )
-                        vk.messages.send(
-                            user_id=event.obj.message['from_id'],
-                            message=f'Количество оставшихся вопросов - {len(map_requests)}. Хотите продолжить?',
-                            random_id=random.randint(0, 2 ** 64)
-                        )
+                        if category == 'материки':
+                            vk.messages.send(
+                                user_id=event.obj.message['from_id'] ,
+                                message=f'Количество оставшихся вопросов - {len(map_continents_requests)}. Хотите продолжить?' ,
+                                random_id=random.randint(0 , 2 ** 64)
+                            )
+                        elif category == 'города':
+                            vk.messages.send(
+                                user_id=event.obj.message['from_id'] ,
+                                message=f'Количество оставшихся вопросов - {len(map_cities_requests)}. Хотите продолжить?' ,
+                                random_id=random.randint(0 , 2 ** 64)
+                            )
+                        elif category == 'моря':
+                            vk.messages.send(
+                                user_id=event.obj.message['from_id'] ,
+                                message=f'Количество оставшихся вопросов - {len(map_seas_requests)}. Хотите продолжить?' ,
+                                random_id=random.randint(0 , 2 ** 64)
+                            )
                         fails.append(str(key))
-                        key, value = '' , ''
+                        key , value = '' , ''
 
                 if "скольк" in str(event.obj.message['text']).lower() and 'меня' in \
                         str(event.obj.message['text']).lower() and ('бал' in str(event.obj.message['text']).lower() or
@@ -167,8 +269,8 @@ def main():
 
                 if "конец" in str(event.obj.message['text']).lower() or "законч" in str(event.obj.message['text']).lower():
                     vk.messages.send(
-                        user_id=event.obj.message['from_id'],
-                        message=f'Как скажешь.',
+                        user_id=event.obj.message['from_id'] ,
+                        message=f'Как скажешь.' ,
                         random_id=random.randint(0 , 2 ** 64)
                     )
                     end()
