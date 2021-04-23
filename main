@@ -60,32 +60,32 @@ def main():
 
     def end():
         vk.messages.send(
-            user_id=event.obj.message['from_id'] ,
-            message=f'Спасибо, что прошёл тест. Твой результат - {counter} из 6.' ,
+            user_id=event.obj.message['from_id'],
+            message=f'Спасибо, что прошёл тест. Твой результат - {counter} из 6.',
             random_id=random.randint(0 , 2 ** 64)
         )
         if counter < 3:
             vk.messages.send(
-                user_id=event.obj.message['from_id'] ,
-                message=f'Если честно, тебе не помешало бы подтянуть знания по географии.' ,
+                user_id=event.obj.message['from_id'],
+                message=f'Если честно, тебе не помешало бы подтянуть знания по географии.',
                 random_id=random.randint(0 , 2 ** 64)
             )
         elif counter < 6:
             vk.messages.send(
                 user_id=event.obj.message['from_id'] ,
-                message=f'Это неплохой балл, но всегда есть к чему стремиться!' ,
+                message=f'Это неплохой балл, но всегда есть к чему стремиться!',
                 random_id=random.randint(0 , 2 ** 64)
             )
         else:
             vk.messages.send(
-                user_id=event.obj.message['from_id'] ,
-                message=f'Это говорит об отличных знаниях номенклатуры!' ,
+                user_id=event.obj.message['from_id'],
+                message=f'Это говорит об отличных знаниях номенклатуры!',
                 random_id=random.randint(0 , 2 ** 64)
             )
         if len(fails) != 0:
             vk.messages.send(
-                user_id=event.obj.message['from_id'] ,
-                message=f'А вот объекты, которые тебе не удалось определить:' ,
+                user_id=event.obj.message['from_id'],
+                message=f'А вот объекты, которые тебе не удалось определить:',
                 random_id=random.randint(0 , 2 ** 64)
             )
             for i in fails:
@@ -100,8 +100,8 @@ def main():
                 photo = upload.photo_messages(photos=image.raw)[0]
                 vk.messages.send(
                     user_id=event.obj.message['from_id'] ,
-                    attachment='photo{}_{}'.format(photo['owner_id'] , photo['id']) ,
-                    message=f'{wikipedia.summary(i)}' ,
+                    attachment='photo{}_{}'.format(photo['owner_id'], photo['id']),
+                    message=f'{wikipedia.summary(i)}',
                     random_id=random.randint(0 , 2 ** 64)
                 )
 
@@ -121,8 +121,8 @@ def main():
                 vk = vk_session.get_api()
                 if messages == 0 and stop == 0:
                     vk.messages.send(
-                        user_id=event.obj.message['from_id'] ,
-                        message=f'Привет. Хочешь пройти географический тест?' ,
+                        user_id=event.obj.message['from_id'],
+                        message=f'Привет. Хочешь пройти географический тест?',
                         random_id=random.randint(0 , 2 ** 64)
                     )
                     messages += 1
@@ -131,15 +131,15 @@ def main():
                 elif messages == 1 and category == '' and stop == 1:
                     if 'да' in str(event.obj.message['text']).lower():
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'] ,
-                            message='Выбери категорию: города, моря или материки?' ,
+                            user_id=event.obj.message['from_id'],
+                            message='Выбери категорию: города, моря или материки?',
                             random_id=random.randint(0 , 2 ** 64)
                         )
                         messages += 1
                     elif 'нет' in str(event.obj.message['text']).lower():
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'] ,
-                            message=f'Как скажешь...' ,
+                            user_id=event.obj.message['from_id'],
+                            message=f'Как скажешь...',
                             random_id=random.randint(0 , 2 ** 64)
                         )
                         end()
@@ -153,8 +153,8 @@ def main():
                         category = "материки"
                     if category != '':
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'] ,
-                            message='Отлично! Тогда начнём.' ,
+                            user_id=event.obj.message['from_id'],
+                            message='Отлично! Тогда начнём.',
                             random_id=random.randint(0 , 2 ** 64)
                         )
 
@@ -176,14 +176,14 @@ def main():
                         print(key, value, response)
 
                         map_file = "map.png"
-                        with open(map_file , "wb") as file:
+                        with open(map_file, "wb") as file:
                             file.write(response.content)
 
                         attachments = []
                         upload = VkUpload(vk_session)
                         photo = upload.photo_messages(photos=map_file)[0]
                         attachments.append(
-                            'photo{}_{}'.format(photo['owner_id'] , photo['id'])
+                            'photo{}_{}'.format(photo['owner_id'], photo['id'])
                         )
                         vk.messages.send(
                             user_id=event.obj.message['from_id'],
@@ -195,7 +195,7 @@ def main():
                         messages += 1
                     elif 'нет' in str(event).lower():
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'] ,
+                            user_id=event.obj.message['from_id'],
                             message=f'Как скажешь...',
                             random_id=random.randint(0 , 2 ** 64)
                         )
@@ -206,72 +206,72 @@ def main():
                             len(map_seas_requests) != 0:
                         counter += 1
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'] ,
-                            message=f'Верно! Теперь количество ваших верных ответов равняется {counter}.' ,
-                            random_id=random.randint(0 , 2 ** 64)
+                            user_id=event.obj.message['from_id'],
+                            message=f'Верно! Теперь количество ваших верных ответов равняется {counter}.',
+                            random_id=random.randint(0, 2 ** 64)
                         )
                         if category == 'материки':
                             vk.messages.send(
-                                user_id=event.obj.message['from_id'] ,
-                                message=f'Количество оставшихся вопросов - {len(map_continents_requests)}. Хотите продолжить?' ,
-                                random_id=random.randint(0 , 2 ** 64)
+                                user_id=event.obj.message['from_id'],
+                                message=f'Количество оставшихся вопросов - {len(map_continents_requests)}. Хотите продолжить?',
+                                random_id=random.randint(0, 2 ** 64)
                             )
                         elif category == 'города':
                             vk.messages.send(
-                                user_id=event.obj.message['from_id'] ,
-                                message=f'Количество оставшихся вопросов - {len(map_cities_requests)}. Хотите продолжить?' ,
-                                random_id=random.randint(0 , 2 ** 64)
+                                user_id=event.obj.message['from_id'],
+                                message=f'Количество оставшихся вопросов - {len(map_cities_requests)}. Хотите продолжить?',
+                                random_id=random.randint(0, 2 ** 64)
                             )
                         elif category == 'моря':
                             vk.messages.send(
-                                user_id=event.obj.message['from_id'] ,
-                                message=f'Количество оставшихся вопросов - {len(map_seas_requests)}. Хотите продолжить?' ,
-                                random_id=random.randint(0 , 2 ** 64)
+                                user_id=event.obj.message['from_id'],
+                                message=f'Количество оставшихся вопросов - {len(map_seas_requests)}. Хотите продолжить?',
+                                random_id=random.randint(0, 2 ** 64)
                             )
                         key, value = '', ''
                     elif str(event.obj.message['text']).capitalize() != str(key).capitalize() and str(key) != '' \
                             and len(map_cities_requests) != 0 and len(map_continents_requests) != 0 and \
                             len(map_seas_requests) != 0:
                         vk.messages.send(
-                            user_id=event.obj.message['from_id'] ,
-                            message=f'Неверно. Количество ваших верных ответов по прежнему равняется {counter}.' ,
-                            random_id=random.randint(0 , 2 ** 64)
+                            user_id=event.obj.message['from_id'],
+                            message=f'Неверно. Количество ваших верных ответов по прежнему равняется {counter}.',
+                            random_id=random.randint(0, 2 ** 64)
                         )
                         if category == 'материки':
                             vk.messages.send(
-                                user_id=event.obj.message['from_id'] ,
-                                message=f'Количество оставшихся вопросов - {len(map_continents_requests)}. Хотите продолжить?' ,
-                                random_id=random.randint(0 , 2 ** 64)
+                                user_id=event.obj.message['from_id'],
+                                message=f'Количество оставшихся вопросов - {len(map_continents_requests)}. Хотите продолжить?',
+                                random_id=random.randint(0, 2 ** 64)
                             )
                         elif category == 'города':
                             vk.messages.send(
-                                user_id=event.obj.message['from_id'] ,
-                                message=f'Количество оставшихся вопросов - {len(map_cities_requests)}. Хотите продолжить?' ,
-                                random_id=random.randint(0 , 2 ** 64)
+                                user_id=event.obj.message['from_id'],
+                                message=f'Количество оставшихся вопросов - {len(map_cities_requests)}. Хотите продолжить?',
+                                random_id=random.randint(0, 2 ** 64)
                             )
                         elif category == 'моря':
                             vk.messages.send(
-                                user_id=event.obj.message['from_id'] ,
-                                message=f'Количество оставшихся вопросов - {len(map_seas_requests)}. Хотите продолжить?' ,
-                                random_id=random.randint(0 , 2 ** 64)
+                                user_id=event.obj.message['from_id'],
+                                message=f'Количество оставшихся вопросов - {len(map_seas_requests)}. Хотите продолжить?',
+                                random_id=random.randint(0, 2 ** 64)
                             )
                         fails.append(str(key))
-                        key , value = '' , ''
+                        key, value = '', ''
 
                 if "скольк" in str(event.obj.message['text']).lower() and 'меня' in \
                         str(event.obj.message['text']).lower() and ('бал' in str(event.obj.message['text']).lower() or
                                                                     'ответ' in str(event.obj.message['text']).lower()):
                     vk.messages.send(
-                        user_id=event.obj.message['from_id'] ,
+                        user_id=event.obj.message['from_id'],
                         message=f'У вас {counter} верных ответов.',
                         random_id=random.randint(0 , 2 ** 64)
                     )
 
                 if "конец" in str(event.obj.message['text']).lower() or "законч" in str(event.obj.message['text']).lower():
                     vk.messages.send(
-                        user_id=event.obj.message['from_id'] ,
-                        message=f'Как скажешь.' ,
-                        random_id=random.randint(0 , 2 ** 64)
+                        user_id=event.obj.message['from_id'],
+                        message=f'Как скажешь.',
+                        random_id=random.randint(0, 2 ** 64)
                     )
                     end()
 
